@@ -12,7 +12,7 @@ import NotFound from "../components/ui/NotFound";
 export default function AppRouter() {
   return (
     <div>
-      <NavBar title={"IUD"} />
+      <NavBar />
       <main className='container'>
         <Routes>
           <Route path='/' element={<TipoEquipos />} />

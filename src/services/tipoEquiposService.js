@@ -37,7 +37,7 @@ const getEquipoByID = (id) => {
 /* 
 *Actualizar tipos de equipos por ID
 */
-const actualizarEquipo = (id, data) => {
+const actualizarEquipoByID = (id, data) => {
     return axiosConfig.put('/tipoequipos/update/' + id, data, {
         headers: {
             'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ const actualizarEquipo = (id, data) => {
 /* 
 *Borrar tipos de equipos por ID
 */
-const borrarEquipo = (id) => {
+const borrarEquipoByID = (id) => {
     return axiosConfig.delete('/tipoequipos/delete/' + id, {
         headers: {
             'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ const borrarEquipo = (id) => {
 export {
     getEquipos,
     crearEquipos,
-    actualizarEquipo,
-    borrarEquipo,
+    actualizarEquipoByID,
+    borrarEquipoByID,
     getEquipoByID
 }

@@ -15,8 +15,8 @@ const crearEquipos = (data) => {
 /* 
 *Consultar tipos de equipo
 */
-const getEquipos = (estado = true) => {
-    return axiosConfig.get('/tipoequipos/all?estado='+ estado, {
+const getEquipos = (estado) => {
+    return axiosConfig.get('/tipoequipos/all?estado=' + estado, {
         headers: {
             'Content-Type': 'application/json'
         }

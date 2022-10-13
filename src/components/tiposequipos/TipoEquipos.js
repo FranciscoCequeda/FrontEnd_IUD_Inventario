@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { borrarEquipoByID, crearEquipos, getEquipos } from '../../services/tipoEquiposService';
+import { actualizarEquipoByID, borrarEquipoByID, crearEquipos, getEquipos } from '../../services/tipoEquiposService';
 import dayjs from 'dayjs';
 import Modal from '../ui/Modal';
+import ModalEditar from '../ui/ModalEditar';
+import DialogoConfirmar from '../ui/DialogoConfirmar';
 
 export default function TipoEquipos() {
 
@@ -18,6 +20,16 @@ export default function TipoEquipos() {
     status: false, msg: ''
   })
 
+  useEffect(() => {
+    listarEquipos()
+  }, [query]
+  )
+
+  const [equipoToEdit, setequipoToEdit] = useState({
+    nombre: '',
+    estado: true
+  })
+
   const listarEquipos = async () => {
     setLoad(true)
     try {
@@ -32,11 +44,6 @@ export default function TipoEquipos() {
       setTipoEquipo([])
     }
   }
-
-  useEffect(() => {
-    listarEquipos()
-  }, [query]
-  )
 
   const cambiarSwitch = () => {
     setQuery(!query)
@@ -71,11 +78,9 @@ export default function TipoEquipos() {
     setEquipo({ nombre: '' })
   }
 
-  const borrarEquipo = async (e) => {
+  const borrarEquipo = async () => {
     try {
-      const id = e.target.id
-      console.log(id);
-      const res = await borrarEquipoByID(id)
+      const res = await borrarEquipoByID(equipoToEdit._id)
       console.log(res);
       listarEquipos()
     } catch (e) {
@@ -83,11 +88,44 @@ export default function TipoEquipos() {
     }
   }
 
-  const editartipoEquipo = async (e) => {
-    e.preventDefault();
-    console.log('editar');
+  const setearEquipo = (e) => {
+    try {
+      const id = e.target.id;
+      const equipo = tipoEquipo.filter(equipo => equipo._id == id)
+      const { ...objEquito } = equipo[0]
+      setequipoToEdit(objEquito)
+    } catch (error) {
+      console.log(error);
+    }
   }
 
+  const changeEquipo = (e) => {
+    setequipoToEdit({ ...equipoToEdit, [e.target.name]: e.target.value })
+  }
+
+  const resetearEquipo = () => {
+    setequipoToEdit({
+      nombre: '',
+      estado: true
+    })
+  }
+
+  const editarTipoEquipo = async (e) => {
+    e.preventDefault()
+    setLoad(true)
+    try {
+      setError(false)
+      const resp = await actualizarEquipoByID(equipoToEdit._id, equipoToEdit);
+      console.log(resp)
+      resetearEquipo()
+      listarEquipos()
+    } catch (e) {
+      setLoad(false)
+      console.log(e)
+      setError(true)
+    }
+
+  }
 
   return (
     <div className='container'>
@@ -119,8 +157,8 @@ export default function TipoEquipos() {
                   <td className='align-middle'>{dayjs(tipoEquipo.fecha_creacion).format('YYYY-MM-DD')}</td>
                   <td className='align-middle'>{dayjs(tipoEquipo.fecha_actualizacion).format('YYYY-MM-DD')}</td>
                   <td className='align-middle'>
-                    <button id={tipoEquipo._id} type="button" className="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal2"><i className="fa-solid fa-pen-to-square"></i></button>
-                    <button type="button" id={tipoEquipo._id} className="btn btn-danger btn-sm" onClick={borrarEquipo}><i className="fa-solid fa-trash"></i></button>
+                    <button id={tipoEquipo._id} type="button" className="btn btn-warning btn-sm fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#exampleModal2" onClick={setearEquipo} name='editar'></button>
+                    <button type="button" id={tipoEquipo._id} className="btn btn-danger btn-sm fa-solid fa-trash" data-bs-toggle="modal" data-bs-target="#modalDelete" onClick={setearEquipo}></button>
                   </td>
                 </tr>
               )
@@ -146,37 +184,9 @@ export default function TipoEquipos() {
         error && (<div className="d-flex justify-content-center alert alert-danger" role="alert"> Error, no se pudo obtener la informacion!!</div>)
       }
 
+      <DialogoConfirmar equipoToEdit={equipoToEdit} borrarequipo={borrarEquipo} />
 
-
-
-
-      <div className="modal fade" id="exampleModal2" tabIndex={0} aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel2">Editar Tipo Equipo</h1>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <form onSubmit={editartipoEquipo}>
-                <div className="mb-3">
-                  <label htmlFor="recipient-name" className="col-form-label">Nombre:</label>
-                  <input type="text" className="form-control" id="recipient-name" onChange={changeInput} value={'hola'} name={"nombre"} />
-                  <select className="form-select" aria-label="Default select example" name='estado' value={'hola'}>
-                    <option value={true}>Activo</option>
-                    <option value={false}>Inactivo</option>
-                  </select>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" className="btn btn-success" data-bs-dismiss="modal">Editar</button>
-                </div>
-                {errorEnvio.status && (<div className="d-flex justify-content-center alert alert-danger" role="alert"> {`${errorEnvio.msg}!!`}</div>)}
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ModalEditar titulo={'Tipo de Equipo'} editar={editarTipoEquipo} errorEnvio={errorEnvio} equipo={equipoToEdit} resetearequipo={resetearEquipo} changeEquipo={changeEquipo}  />
 
 
       <Modal titulo={'Tipo de Equipo'} guardar={guardarEquipo} element={equipo} change={changeInput} errorEnvio={errorEnvio} reset={resetFields} />

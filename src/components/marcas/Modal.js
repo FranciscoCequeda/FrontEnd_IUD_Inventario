@@ -27,7 +27,7 @@ export default function Modal({ titulo, guardar, element, change, errorEnvio, re
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={reset}>Cerrar</button>
-                                <button type="submit" className="btn btn-success" disabled={element.nombre.length < 2}>Guardar</button>
+                                <button type="submit" className="btn btn-success" disabled={element.nombre.length < 1}>Guardar</button>
                             </div>
                             {errorEnvio.status && (<div className="d-flex justify-content-center alert alert-danger" role="alert"> {`${errorEnvio.msg}!!`}</div>)}
                         </form>

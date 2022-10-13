@@ -15,8 +15,8 @@ const crearMarcas = (data) => {
 /* 
 *Consultar tipos de equipo
 */
-const getMarcas = (estado = true) => {
-    return axiosConfig.get('/marcas/all?estado='+ estado, {
+const getMarcas = (estado) => {
+    return axiosConfig.get('/marcas/all?estado=' + estado, {
         headers: {
             'Content-Type': 'application/json'
         }

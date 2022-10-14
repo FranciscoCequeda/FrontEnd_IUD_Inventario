@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { crearUsuarios, getUsuarios, getUsuarioByID, actualizarUsuarioByID, borrarUsuarioByID } from '../../services/usuariosService';
+import { crearUsuarios, getUsuarios, actualizarUsuarioByID, borrarUsuarioByID } from '../../services/usuariosService';
 import dayjs from 'dayjs';
 import ModalEditar from '../usuarios/ModalEditar';
 import Modal from '../usuarios/Modal';
@@ -57,7 +57,7 @@ export default function Usuarios() {
     try {
       await crearUsuarios(usuario)
       setLoad(true)
-      setUsuario({ nombre: '',  email: ''})
+      setUsuario({ nombre: '', email: '' })
       setErrorEnvio({ status: false, msg: '' })
       listarUsuarios();
     } catch (e) {

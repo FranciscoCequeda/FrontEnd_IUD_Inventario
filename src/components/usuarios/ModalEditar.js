@@ -6,11 +6,6 @@ export default function ModalEditar({ titulo, editar, errorEnvio, usuario, reset
         changeUsuario(e)
     }
 
-
-    const validarCampos = () => {
-
-    }
-
     return (
         <div className="modal fade" id="exampleModal2" tabIndex={0} aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog">
@@ -26,14 +21,14 @@ export default function ModalEditar({ titulo, editar, errorEnvio, usuario, reset
                                 <input type="text" className="form-control" id="recipient-name" name="nombre" value={usuario.nombre} onChange={changeEl} />
                                 <label htmlFor="recipient-email" className="col-form-label">Email:</label>
                                 <input type="email" className="form-control" id="recipient-email" name="email" value={usuario.email} onChange={changeEl} />
-                                <select className="form-select" aria-label="Default select example" name='usuario' value={usuario.usuario} onChange={changeEl}>
+                                <select className="form-select" aria-label="Default select example" name='estado' value={usuario.estado} onChange={changeEl}>
                                     <option value={true}>Activo</option>
                                     <option value={false}>Inactivo</option>
                                 </select>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={resetearusuario}>Cancelar</button>
-                                <button type="submit" className="btn btn-success" disabled={usuario.email == '' || usuario.nombre == ''}>Editar</button>
+                                <button type="submit" className="btn btn-success" data-bs-dismiss="modal" disabled={usuario.email.length < 8 || usuario.nombre.length < 4}>Editar</button>
                             </div>
                             {errorEnvio.status && (<div className="d-flex justify-content-center alert alert-danger" role="alert"> {`${errorEnvio.msg}!!`}</div>)}
                         </form>
